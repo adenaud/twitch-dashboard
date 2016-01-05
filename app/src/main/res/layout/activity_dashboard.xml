@@ -1,0 +1,201 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    tools:context=".Dashboard">
+
+    <!-- The primary full-screen view. This can be replaced with whatever view
+         is needed to present your content, e.g. VideoView, SurfaceView,
+         TextureView, etc. -->
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/fullscreen_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:keepScreenOn="true"
+        android:padding="8dp">
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text=""
+            android:id="@+id/text_channel_title" />
+        <TextView
+            android:id="@+id/text_clock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="72sp"
+            android:text="@string/time"
+            android:gravity="center_horizontal" />
+        
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp">
+
+            <ImageButton
+                android:background="@drawable/ic_quit"
+                android:id="@+id/btn_quit"
+                android:textSize="48sp"
+                android:layout_width="48dp"
+                android:layout_height="48dp" />
+
+        </LinearLayout>
+
+        <ImageView
+            android:layout_marginTop="8dp"
+            android:src="@drawable/separator"
+            android:layout_width="match_parent"
+            android:layout_height="2dp" />
+
+        <LinearLayout
+            android:layout_marginTop="8dp"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="0"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="32dp"
+                android:layout_marginBottom="8dp"
+                android:src="@drawable/twitch" />
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/separator"
+                android:contentDescription="@string/separator" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:baselineAligned="false">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:scaleType="center"
+                        android:src="@drawable/viewers" />
+                    <TextView
+                        android:id="@+id/text_viewers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        style="@style/textLight"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:scaleType="center"
+                        android:src="@drawable/views" />
+                    <TextView
+                        android:id="@+id/text_views"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        style="@style/textLight"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_weight="1">
+
+                    <ImageView
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:scaleType="center"
+                        android:src="@drawable/followers" />
+                    <TextView
+                        android:id="@+id/text_followers"
+                        android:layout_width="wrap_content"
+                        android:layout_height="48dp"
+                        android:gravity="center"
+                        style="@style/textLight"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/separator"
+                android:contentDescription="@string/separator" />
+
+            <TextView
+                android:id="@+id/text_chat"
+                android:layout_width="fill_parent"
+                android:layout_height="0dp"
+                android:scrollbars="vertical"
+                style="@style/textLight"
+                android:layout_weight="1" />
+
+
+            <ImageView
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="@drawable/separator"
+                android:contentDescription="@string/separator" />
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_vertical">
+
+                <EditText
+                    android:inputType="text"
+                    android:singleLine="true"
+                    android:hint="@string/send_message"
+                    android:layout_width="0dp"
+                    android:layout_height="48dp"
+                    android:id="@+id/text_chat_send"
+                    android:layout_gravity="center_horizontal"
+                    style="@style/edit_text"
+                    android:layout_weight="1"
+                    android:imeActionLabel="@string/send"
+                    android:imeOptions="actionSend"/>
+
+                <Button
+                    style="@style/button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="@string/send"
+                    android:id="@+id/button_send"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"/>
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+</FrameLayout>
