@@ -2,8 +2,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
-    tools:context=".Dashboard">
+    tools:context=".Dashboard"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
@@ -15,30 +16,43 @@
         android:layout_height="match_parent"
         android:keepScreenOn="true"
         android:padding="8dp">
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text=""
-            android:id="@+id/text_channel_title" />
-        <TextView
-            android:id="@+id/text_clock"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="72sp"
-            android:text="@string/time"
-            android:gravity="center_horizontal" />
-        
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="48dp">
 
-            <ImageButton
-                android:background="@drawable/ic_quit"
-                android:id="@+id/btn_quit"
-                android:textSize="48sp"
-                android:layout_width="48dp"
-                android:layout_height="48dp" />
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:layout_marginBottom="8dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/twitch"
+                android:layout_weight="1" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:orientation="horizontal"
+                android:gravity="center_vertical">
+
+                <ImageButton
+                    android:id="@+id/btn_settings"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:background="@drawable/ic_settings"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginRight="16dp"/>
+
+                <ImageButton
+                    android:id="@+id/btn_quit"
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:background="@drawable/ic_quit"
+                    android:contentDescription="@string/quit"
+                    android:textSize="48sp" />
+
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -48,18 +62,27 @@
             android:layout_width="match_parent"
             android:layout_height="2dp" />
 
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text=""
+            android:id="@+id/text_channel_title" />
+
+        <TextView
+            android:id="@+id/text_clock"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="72sp"
+            android:text="@string/time"
+            android:gravity="center_horizontal" />
+
         <LinearLayout
             android:layout_marginTop="8dp"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_weight="0"
             android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="fill_parent"
-                android:layout_height="32dp"
-                android:layout_marginBottom="8dp"
-                android:src="@drawable/twitch" />
 
             <ImageView
                 android:layout_width="fill_parent"
