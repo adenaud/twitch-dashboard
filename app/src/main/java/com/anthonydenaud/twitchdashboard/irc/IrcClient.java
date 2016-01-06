@@ -18,9 +18,9 @@ public class IrcClient implements OnMessageListener{
         irc = new TwitchIrcBot();
     }
 
-    public void connect(final String hostname, final int port, final String password, final String channel){
+    public void connect(final String hostname, final int port, final String password, final String username){
 
-        this.channel = channel;
+        this.channel = "#"+channel;
 
         Thread thread = new Thread(new Runnable() {
             @Override
@@ -42,6 +42,18 @@ public class IrcClient implements OnMessageListener{
         },"IRC_THREAD");
         thread.start();
 
+    }
+
+    public void disconnect(){
+        irc.disconnect();
+    }
+
+    public boolean isConnected(){
+        return irc.isConnected();
+    }
+
+    public String getChannel() {
+        return channel;
     }
 
     public void setOnMessageListener(OnMessageListener onMessageListener) {

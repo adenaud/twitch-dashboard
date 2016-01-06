@@ -13,7 +13,7 @@
         <item>30m</item>
     </string-array>
 
-    <integer-array name="refresh_rates_values">
+    <string-array name="refresh_rates_values">
         <item>1000</item>
         <item>2000</item>
         <item>5000</item>
@@ -24,5 +24,5 @@
         <item>300000</item>
         <item>600000</item>
         <item>1800000</item>
-    </integer-array>
+    </string-array>
 </resources>

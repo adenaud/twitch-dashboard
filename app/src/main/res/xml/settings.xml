@@ -7,7 +7,8 @@
 
     <EditTextPreference
         android:key="twitch_chat_oauth"
-        android:title="@string/chatoauth"/>
+        android:title="@string/chatoauth"
+        android:summary="@string/token_summary"/>
 
 
     <ListPreference
@@ -15,7 +16,8 @@
         android:title="@string/data_refresh_rate"
         android:summary="@string/data_refresh_rate_summary"
         android:entries="@array/refresh_rates_title"
-        android:entryValues="@array/refresh_rates_values" />
+        android:entryValues="@array/refresh_rates_values"
+        android:defaultValue="5000"/>
 
 
 </PreferenceScreen>

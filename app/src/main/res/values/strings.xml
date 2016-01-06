@@ -18,6 +18,8 @@
     <string name="chatoauth">Chat OAuth Token</string>
     <string name="data_refresh_rate">Refresh rate</string>
     <string name="data_refresh_rate_summary">Update data every X</string>
+    <string name="invalid_token">Invalid Twitch Chat OAuth Token</string>
+    <string name="token_summary">Generate you token on https://twitchapps.com/tmi/</string>
 
 
 </resources>

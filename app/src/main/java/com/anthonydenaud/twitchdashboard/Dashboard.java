@@ -5,10 +5,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.View;
@@ -22,7 +24,6 @@ import android.widget.TextView;
 import com.anthonydenaud.twitchdashboard.irc.IrcClient;
 import com.anthonydenaud.twitchdashboard.irc.OnMessageListener;
 import com.anthonydenaud.twitchdashboard.settings.SettingsActivity;
-import com.anthonydenaud.twitchdashboard.settings.SettingsFragment;
 import com.anthonydenaud.twitchdashboard.twitch.TwitchAPI;
 
 
@@ -36,6 +37,10 @@ import java.util.TimerTask;
 
 
 public class Dashboard extends AppCompatActivity implements View.OnClickListener, OnMessageListener, TextView.OnEditorActionListener {
+
+
+    private SharedPreferences preferences;
+    private String username;
 
     private View mContentView;
     private ImageButton btnQuit;
@@ -63,14 +68,18 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
     private IrcClient ircClient;
     private ImageButton buttonSettings;
 
-    private String username;
-    private SharedPreferences preferences;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ircClient = new IrcClient();
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        initUi();
+    }
+
+    private void initUi() {
         setContentView(R.layout.activity_dashboard);
+
 
         mContentView = findViewById(R.id.fullscreen_content);
         btnQuit = (ImageButton) findViewById(R.id.btn_quit);
@@ -88,24 +97,6 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         buttonSendMessage = (Button) findViewById(R.id.button_send);
         buttonSettings = (ImageButton) findViewById(R.id.btn_settings);
 
-        btnQuit.setOnClickListener(this);
-        buttonSettings.setOnClickListener(this);
-        buttonSendMessage.setOnClickListener(this);
-
-        preferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-    }
-
-    private void initUi() {
-
-        username = preferences.getString("twitch_username","");
-
-        ircClient = new IrcClient();
-        ircClient.connect("irc.twitch.tv", 6667, "", "#" + username);
-
-        ircClient.setOnMessageListener(this);
-
-
         textChat.setText(chat);
         textTime.setText(time);
 
@@ -114,19 +105,13 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         textFollowers.setText(followers);
 
         textChat.setMovementMethod(new ScrollingMovementMethod());
+        btnQuit.setOnClickListener(this);
 
+        buttonSettings.setOnClickListener(this);
+        buttonSendMessage.setOnClickListener(this);
 
         hide();
 
-        if(StringUtils.isNotEmpty(username)){
-            twitchApiTimer = new Timer();
-            twitchApiTimer.scheduleAtFixedRate(new TimerTask() {
-                @Override
-                public void run() {
-                    refreshTwitchDatas();
-                }
-            }, 0, preferences.getInt("refresh_rate",5000));
-        }
     }
 
     @Override
@@ -134,31 +119,57 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
         super.onPostCreate(savedInstanceState);
         hide();
 
-
         if(!preferences.getBoolean("firstrun",false)){
             Intent intent = new Intent(this,SettingsActivity.class);
             preferences.edit().putBoolean("firstrun",true).apply();
             startActivityForResult(intent, 0x55);
-        }else{
-            initUi();
+        }
+        else{
+            start();
+        }
+    }
+
+    private void start() {
+        username = preferences.getString("twitch_username","");
+        if(!ircClient.isConnected() || username.equals(ircClient.getChannel())){
+            ircClient.connect("irc.twitch.tv", 6667, preferences.getString("twitch_chat_oauth",""),  username);
         }
 
 
-        final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.FRANCE);
+        if(dateTimer == null){
+            dateTimer = new Timer();
+            dateTimer.scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
 
-        dateTimer = new Timer();
-        dateTimer.scheduleAtFixedRate(new TimerTask() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            final SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.FRANCE);
+                            final Date date = new Date();
+                            textTime.setText(sdf.format(date));
+                        }
+                    });
+
+
+                }
+            }, 0, 1000);
+        }
+
+
+        if(twitchApiTimer != null){
+            twitchApiTimer.cancel();
+            Log.d("ApiTimer","timer cancel");
+        }
+
+        twitchApiTimer = new Timer();
+        twitchApiTimer.scheduleAtFixedRate(new TimerTask() {
             @Override
             public void run() {
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        final Date date = new Date();
-                        textTime.setText(sdf.format(date));
-                    }
-                });
+                Log.d("ApiTimer", "refresh data");
+                refreshTwitchDatas();
             }
-        }, 0, 1000);
+        }, 0, Integer.valueOf(preferences.getString("refresh_rate","5000")));
     }
 
     private void refreshTwitchDatas() {
@@ -260,39 +271,44 @@ public class Dashboard extends AppCompatActivity implements View.OnClickListener
 
         if (v.equals(editTextSendMessage) && actionId == EditorInfo.IME_ACTION_SEND) {
             sendMessage();
-
+            return true;
         }
         return handled;
     }
 
     private void sendMessage() {
         final String message = editTextSendMessage.getText().toString();
-        if (StringUtils.isNotEmpty(message)) {
-            ircClient.sendMessage(message);
-            editTextSendMessage.setText("");
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    textChat.append(username + " : " + message + "\n");
-                    final int scrollAmount = textChat.getLayout().getLineTop(textChat.getLineCount()) - textChat.getHeight();
-                    if (scrollAmount > 0) {
-                        textChat.scrollTo(0, scrollAmount);
-                    } else {
-                        textChat.scrollTo(0, 0);
+        if(preferences.getString("twitch_chat_oauth","").length() == 36){
+            if (StringUtils.isNotEmpty(message)) {
+                ircClient.sendMessage(message);
+                editTextSendMessage.setText("");
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        textChat.append(username + " : " + message + "\n");
+                        final int scrollAmount = textChat.getLayout().getLineTop(textChat.getLineCount()) - textChat.getHeight();
+                        if (scrollAmount > 0) {
+                            textChat.scrollTo(0, scrollAmount);
+                        } else {
+                            textChat.scrollTo(0, 0);
+                        }
                     }
-                }
-            });
+                });
+            }
+        }else{
+            Snackbar.make(findViewById(android.R.id.content),R.string.invalid_token,Snackbar.LENGTH_SHORT).show();
         }
+
+
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
         if(requestCode == 0x55){
-            initUi();
+            start();
         }
-
         super.onActivityResult(requestCode, resultCode, data);
     }
 }
