@@ -9,4 +9,13 @@
         android:key="twitch_chat_oauth"
         android:title="@string/chatoauth"/>
 
+
+    <ListPreference
+        android:key="refresh_rate"
+        android:title="@string/data_refresh_rate"
+        android:summary="@string/data_refresh_rate_summary"
+        android:entries="@array/refresh_rates_title"
+        android:entryValues="@array/refresh_rates_values" />
+
+
 </PreferenceScreen>

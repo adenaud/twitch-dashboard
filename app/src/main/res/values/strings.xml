@@ -11,10 +11,13 @@
     <string name="send">Send</string>
     <string name="send_message">Send a message</string>
     <string name="title_activity_settings">Settings</string>
-    <string name="username">Twitch username</string>
-    <string name="chatoauth">Chat OAuth Token</string>
+
 
     <!-- Strings related to Settings -->
+    <string name="username">Twitch username</string>
+    <string name="chatoauth">Chat OAuth Token</string>
+    <string name="data_refresh_rate">Refresh rate</string>
+    <string name="data_refresh_rate_summary">Update data every X</string>
 
 
 </resources>
